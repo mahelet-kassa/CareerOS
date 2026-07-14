@@ -49,6 +49,7 @@ nav:
   - Conventions: CONVENTIONS.md
   - 00 · Product:
       - Vision: 00-product/vision.md
+      - Market & Competition: 00-product/market-and-competition.md
       - Personas & JTBD: 00-product/personas-and-jobs.md
       - Requirements: 00-product/requirements.md
       - User Stories: 00-product/user-stories.md
@@ -74,6 +75,8 @@ nav:
   - 04 · AI:
       - Overview: 04-ai/overview.md
       - RAG Pipeline: 04-ai/rag-pipeline.md
+      - Resume Processing: 04-ai/resume-processing.md
+      - Job Matching: 04-ai/matching.md
       - Prompts & Evals: 04-ai/prompts-and-evals.md
       - Model Strategy: 04-ai/model-strategy.md
   - 05 · Data:
@@ -86,6 +89,8 @@ nav:
   - 07 · Decisions:
       - ADR Index: 07-decisions/README.md
       - ADR-001 Monolith + AI service: adr/001-monolith-plus-ai-service.md
+      - ADR-002 Managed auth: adr/002-managed-auth.md
+      - ADR-003 Evidence-constrained generation: adr/003-evidence-constrained-generation.md
   - 08 · Engineering:
       - Development Workflow: 08-engineering/development-workflow.md
       - Testing Strategy: 08-engineering/testing-strategy.md

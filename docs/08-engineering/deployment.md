@@ -1,34 +1,39 @@
 ---
 title: Deployment
-status: stub
+status: draft
 last-reviewed: 2026-07-14
 owner: Mahelet
 ---
 
 # Deployment
 
-> **Status: stub.** Fill in at Milestone 6 (Productionize). CI hints in the code
-> (`application.yml` probes, `ci.yml` comments) point toward an ECS/ALB-style
-> target.
+Target: **AWS ECS Fargate** behind an ALB (topology in
+[infrastructure](../09-operations/infrastructure.md)). Detailed pipeline is
+finalized at Milestone 7 (Productionize).
 
-## To document
+## Release units
+
+Separate container images / ECS services, deployed independently:
+
+| Image | Scales on |
+|---|---|
+| `web` (Next.js) | request traffic |
+| `core-api` (Spring Boot) | request traffic |
+| `ai-service` (Node/TS) | request traffic (streaming) |
+| `workers` (SQS consumers) | **queue depth**, not request traffic |
+
+`ai-service` and `workers` may share codebases but run as separate ECS services.
+
+## To document (Milestone 7)
 
 - **Environments** — local / staging / production; config per environment.
-- **Build & release** — container images for `core-api`, `web`, `ai-service`;
-  tagging and promotion.
-- **Infrastructure as code** — the topology (see [infrastructure](../09-operations/infrastructure.md)).
-- **Database migrations in deploy** — Flyway runs on startup; forward-only.
-- **Health checks** — liveness/readiness probes (already implemented) driving
-  safe rolling deploys (NFR-R3).
-- **Secrets** — injected via secret store, never in images or git (NFR-S2).
-- **Rollback** — strategy and how migrations interact with rollback.
-
-## Deployment diagram (to add)
-
-```
-[ to add: Mermaid deployment diagram —
-  load balancer → web / core-api / ai-service → managed Postgres+pgvector, SQS ]
-```
+- **Build & release** — image tagging and promotion; CI → registry → ECS.
+- **Infrastructure as code** — the topology as IaC.
+- **Database migrations in deploy** — Flyway runs on startup; forward-only; plan
+  how migrations interact with rolling deploys and rollback.
+- **Health checks** — liveness/readiness probes (already implemented) driving safe
+  rolling deploys (NFR-R3).
+- **Secrets** — injected via Secrets Manager, never in images or git (NFR-S2).
 
 ## Related
 

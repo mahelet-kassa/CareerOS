@@ -28,6 +28,8 @@ lowest-effort documentation a project can keep.
 | ADR | Title | Status | Date |
 |---|---|---|---|
 | [001](../adr/001-monolith-plus-ai-service.md) | Modular monolith (Spring Boot) + one AI service (Node), not microservices | Accepted | 2026-07-14 |
+| [002](../adr/002-managed-auth.md) | Managed auth (Cognito/Auth0) + Spring resource server, not custom auth | Accepted | 2026-07-14 |
+| [003](../adr/003-evidence-constrained-generation.md) | Evidence-constrained generation + hybrid matching (structural, not prompt-based) | Accepted | 2026-07-14 |
 
 ## When does something need an ADR?
 

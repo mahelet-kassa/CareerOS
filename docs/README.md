@@ -23,7 +23,7 @@ code it describes, and published as a browsable site.
 
 | Section | What lives here |
 |---|---|
-| [00 · Product](00-product/vision.md) | Vision, personas, requirements, user stories, MVP scope, roadmap — the *why* and *what* |
+| [00 · Product](00-product/vision.md) | Vision, market & competition, personas, requirements, user stories, MVP scope, roadmap — the *why* and *what* |
 | [01 · Architecture](01-architecture/overview.md) | System-level design, C4 diagrams, tech stack, security, observability |
 | [02 · Backend](02-backend/overview.md) | `core-api` (Spring Boot) module map, boundaries, standards |
 | [03 · Frontend](03-frontend/overview.md) | `web` (Next.js) architecture, components, data fetching |

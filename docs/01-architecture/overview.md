@@ -38,43 +38,59 @@ graph TB
     subgraph CareerOS
         sys[CareerOS Platform]
     end
-    oauth[OAuth providers<br/>Google · GitHub]
-    llm[LLM providers<br/>e.g. OpenAI]
+    idp[Identity provider<br/>Cognito / Auth0]
+    gh[GitHub<br/>OAuth + evidence import]
+    llm[LLM provider<br/>e.g. OpenAI]
 
     user -->|uses via browser| sys
-    sys -->|authenticates via| oauth
+    sys -->|OIDC auth| idp
+    sys -->|OAuth + repo/activity import| gh
     sys -->|prompts / embeddings| llm
 ```
 
 ## C4 Level 2 — Containers
 
-The deployable/runnable pieces and how they communicate.
+The deployable/runnable pieces and how they communicate. Target runtime is
+**AWS** (ECS Fargate behind an ALB; managed data services). See
+[infrastructure](../09-operations/infrastructure.md).
 
 ```mermaid
 graph TB
     user([User's browser])
+    cdn[CloudFront<br/>static assets]
 
-    subgraph "CareerOS"
-        web["web<br/>Next.js (TypeScript)<br/>SSR web client"]
+    subgraph "AWS"
+        web["web<br/>Next.js (TS) · SSR"]
         api["core-api<br/>Spring Boot (Java 21)<br/>auth · domain · only DB write path"]
-        ai["ai-service<br/>Node/TypeScript (~Wk 2)<br/>stateless LLM orchestration"]
-        worker["workers<br/>async jobs: parse · embed"]
-        db[("PostgreSQL 16 + pgvector<br/>single datastore")]
-        queue[["SQS<br/>async work queue"]]
+        ai["ai-service<br/>Node/TS · stateless<br/>LLM orchestration"]
+        worker["workers<br/>SQS consumers: parse · embed · insights"]
+        db[("RDS PostgreSQL 16<br/>+ pgvector")]
+        queue[["SQS<br/>+ DLQs"]]
+        s3[("S3<br/>resume files")]
     end
 
-    llm[LLM providers]
+    idp[Cognito / Auth0]
+    llm[LLM provider]
 
     user -->|HTTPS| web
+    user -->|static| cdn
+    web -->|OIDC code flow| idp
     web -->|REST, generated client| api
+    api -->|validate JWT via JWKS| idp
     api -->|read/write| db
     api -->|authenticated internal REST| ai
     api -->|enqueue| queue
+    user -->|presigned upload| s3
+    s3 -->|event| queue
     queue --> worker
-    worker -->|write results/embeddings| db
-    ai -->|prompts| llm
+    worker -->|write results/embeddings via core-api| db
+    ai -->|prompts / embeddings| llm
     ai -.->|never owns domain data| db
 ```
+
+**Four moving parts to operate** (the max a solo engineer should carry): two
+services, workers, one database. Everything is stateless on Fargate; queues
+absorb AI burstiness and provide backpressure.
 
 Key rules encoded here (from [ADR-001](../07-decisions/README.md)):
 

@@ -10,10 +10,14 @@ owner: Mahelet
 > **Status: stub.** The current UI is unstyled scaffolding. Define the visual
 > language before building real views.
 
+## Decided
+
+- **Tailwind + shadcn/ui** as the component/styling foundation.
+- **react-hook-form + Zod** for forms and validation.
+
 ## To define
 
 - Design tokens (color, spacing, typography, radius).
-- Component library choice (headless + Tailwind, a UI kit, or hand-rolled).
 - Theming (light/dark), responsive breakpoints.
 - Accessibility standards (contrast, focus, keyboard nav) — the primary persona
   is keyboard-heavy.

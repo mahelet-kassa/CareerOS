@@ -13,8 +13,10 @@ talks to `core-api` over REST using a generated client.
 ## Stack
 
 - **Next.js ^15.3** (App Router) + **React 19** + **TypeScript ^5.5**.
-- Server components + SSR for fast first paint; streaming support for future AI
-  output.
+- Server components + SSR for fast first paint; **SSE** for streaming AI output.
+- **TanStack Query** for server state; **Tailwind + shadcn/ui**;
+  **react-hook-form + Zod** (planned — see [design system](design-system.md),
+  [state & data fetching](state-and-data-fetching.md)).
 - Source of truth: `apps/web/package.json`, `tsconfig.json`.
 
 ## Current state (implemented)

@@ -3,6 +3,7 @@ title: AI / LLM Architecture Overview
 status: draft
 last-reviewed: 2026-07-14
 owner: Mahelet
+source: docs/product/03_Technical_Architecture.docx (migrated)
 ---
 
 # AI / LLM Architecture Overview
@@ -12,16 +13,37 @@ isolated into a separate **`ai-service`** (Node/TypeScript, added ~Week 2) so it
 latency and failure characteristics never touch the transactional core
 ([ADR-001](../07-decisions/README.md), NFR-R1).
 
+**RAG here is not "chat over documents"** — it is **evidence retrieval for
+constrained generation**. See [RAG pipeline](rag-pipeline.md),
+[Resume processing](resume-processing.md), and [Matching](matching.md).
+
 ## Design tenets
 
 1. **Stateless.** `ai-service` owns no domain data and never writes to the DB
-   directly. It receives context, calls the LLM, returns/streams output.
+   directly. It receives context, calls the LLM, returns/streams output; results
+   are written back through `core-api` internal endpoints.
 2. **Nothing blocks on an LLM call.** Heavy work (resume parsing, embedding
-   generation) runs async via SQS + workers.
-3. **Grounded.** Generation is anchored to the user's real data via retrieval
-   (RAG), not free invention (FR-4.3).
-4. **Isolated embeddings.** Vectors live in one pgvector table so a dedicated
-   vector store later is a migration, not a redesign.
+   generation, insights) runs async via SQS + workers.
+3. **Grounded & provably true.** Generation is anchored to source-attributed
+   facts; a **validator rejects any output whose claims lack a supporting fact
+   ID** and retries with feedback. The guardrail is **structural, not
+   prompt-based** (FR-4.3, [ADR-003](../adr/003-evidence-constrained-generation.md)).
+4. **Isolated embeddings.** Vectors live in one pgvector table (with a model tag)
+   so a dedicated vector store later is a migration, not a redesign.
+
+## Model routing & provider abstraction
+
+- **Route by task:** a cheap/fast model (e.g. `gpt-4o-mini` class) for
+  extraction/embedding; the strongest model only for generation and match
+  reasoning. Track **cost per user per feature** (NFR-C1).
+- **Thin provider abstraction** — not for elegance, for the day a better/cheaper
+  model ships. Zero-data-retention flags; user data never used for training. See
+  [model strategy](model-strategy.md).
+
+## Untrusted input
+
+Job postings are **untrusted** — prompt-injection filtering happens before any
+posting text reaches a generation context (NFR-S4, [security](../01-architecture/security.md)).
 
 ## Where AI shows up
 

@@ -1,24 +1,42 @@
 ---
 title: Model Strategy
-status: stub
+status: draft
 last-reviewed: 2026-07-14
 owner: Mahelet
+source: docs/product/03_Technical_Architecture.docx (migrated)
 ---
 
 # Model Strategy
 
-> **Status: stub.** Decide and record as an ADR when the AI service is built.
+## Model routing (by task)
 
-## To decide / document
+Route each task to the cheapest model that does the job well:
 
-- **Providers & models** — generation model(s), embedding model, and why.
-- **Abstraction** — a provider-agnostic interface so models can be swapped
-  (cost/quality) without touching callers.
-- **Fallback** — behavior when the primary provider is degraded (NFR-R1).
-- **Caching** — cache embeddings and (where safe) generations to cut cost
-  (NFR-C1).
-- **Cost controls** — per-feature usage metering, budgets, rate limits.
-- **Data handling** — provider data-retention settings; no training on user data.
+| Task | Model tier |
+|---|---|
+| Resume extraction, embeddings | Cheap/fast (e.g. `gpt-4o-mini` class) |
+| Match reasoning (adjudication) | Strongest |
+| Resume/cover-letter generation | Strongest |
+
+Track **cost per user per feature** (NFR-C1) and enforce **quotas/rate limits**
+(abuse = the LLM bill, NFR-C2).
+
+## Provider abstraction
+
+A **thin provider abstraction** over the LLM API — *not for elegance, for the day
+a better/cheaper model ships.* Start with the OpenAI API.
+
+## Data handling
+
+- **Zero-data-retention** flags enabled; **user data never used for training.**
+- Document provider retention settings alongside the
+  [data lifecycle](../05-data/data-lifecycle.md).
+
+## To decide / record as ADRs
+
+- Concrete model choices + dimensionality for embeddings.
+- Fallback behavior when the primary provider is degraded (NFR-R1).
+- Caching strategy for embeddings and (where safe) generations.
 
 ## Related
 

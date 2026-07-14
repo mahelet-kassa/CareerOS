@@ -27,7 +27,18 @@ this page.
 | Testing (API) | JUnit 5 + Testcontainers | (Boot-managed) | `build.gradle.kts` |
 | CI | GitHub Actions | — | `.github/workflows/ci.yml` |
 | AI service (planned) | Node/TypeScript | ~Wk 2 | [ADR-001](../07-decisions/README.md) |
-| Queue (planned) | AWS SQS | — | [ADR-001](../07-decisions/README.md) |
+| Client state (web) | TanStack Query | — | [frontend](../03-frontend/state-and-data-fetching.md) |
+| UI (web) | Tailwind + shadcn/ui | — | [design system](../03-frontend/design-system.md) |
+| Forms/validation (web) | react-hook-form + Zod | — | [frontend](../03-frontend/overview.md) |
+| Streaming | Server-Sent Events (SSE) | — | [AI overview](../04-ai/overview.md) |
+| Auth (planned) | Cognito / Auth0 (OIDC) + Spring resource server | — | [ADR-002](../adr/002-managed-auth.md) |
+| Queue (planned) | AWS SQS (+ DLQs) | — | [ADR-001](../07-decisions/README.md) |
+| File storage (planned) | AWS S3 (presigned uploads) | — | [resume processing](../04-ai/resume-processing.md) |
+| Compute (planned) | AWS ECS Fargate + ALB | — | [infrastructure](../09-operations/infrastructure.md) |
+| CDN (planned) | AWS CloudFront | — | [infrastructure](../09-operations/infrastructure.md) |
+| OCR (planned) | AWS Textract (fallback) | — | [resume processing](../04-ai/resume-processing.md) |
+| Text extraction (planned) | pdfbox / mammoth | — | [resume processing](../04-ai/resume-processing.md) |
+| Secrets / crypto (planned) | AWS Secrets Manager + KMS | — | [security](security.md) |
 
 ## Rationale
 
@@ -62,6 +73,26 @@ real Flyway migrations applied — high-fidelity confidence, no mocking the DB. 
 LLM tooling and streaming ergonomics are strongest in the JS ecosystem, and it
 shares a language with the web client. Kept stateless so it scales horizontally
 and its failures are isolated from the core (NFR-R1, NFR-SC1).
+
+### Managed auth (Cognito / Auth0) — buy, don't build
+Auth bugs are existential for a product holding career histories. A solo engineer
+should spend innovation budget on the AI pipeline, not on refresh-token rotation.
+Spring Security runs as a stateless OAuth2 **resource server** validating JWTs via
+JWKS; the web app runs the OIDC code flow. See [ADR-002](../adr/002-managed-auth.md).
+
+### AWS (ECS Fargate, RDS, SQS, S3, CloudFront) for infrastructure
+Everything stateless behind an ALB so scaling is configuration; queues absorb AI
+burstiness with backpressure for free; RDS has years of headroom with indexes + a
+read replica. Deliberate non-goals at MVP: no Kubernetes, no multi-region, no
+service mesh — each is a thing that pages you. See
+[infrastructure](../09-operations/infrastructure.md).
+
+### Next.js supporting libraries
+TanStack Query for server state (URL + query cache covers nearly everything — no
+global store unless genuinely needed); SSE for AI progress and token streaming
+(simpler than WebSockets through an ALB, and one-directional is all we need);
+Tailwind + shadcn/ui; react-hook-form + Zod (Zod schemas generated from OpenAPI
+where possible).
 
 ## The generated contract
 

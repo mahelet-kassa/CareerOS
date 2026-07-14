@@ -26,7 +26,10 @@ Diagrams are **code**, not binary images (see
 | Resume parse (async) | sequence | [ai/overview](../04-ai/overview.md) |
 | Tailored generation (streaming) | sequence | [ai/overview](../04-ai/overview.md) |
 | RAG pipeline | flowchart | [ai/rag-pipeline](../04-ai/rag-pipeline.md) |
+| Resume processing pipeline | flowchart | [ai/resume-processing](../04-ai/resume-processing.md) |
+| Job matching (3-stage) | flowchart | [ai/matching](../04-ai/matching.md) |
+| MVP user journey | flowchart | [product/mvp-scope](../00-product/mvp-scope.md) |
 | Auth flow | flowchart | [architecture/security](../01-architecture/security.md) |
 | CI pipeline | flowchart | [engineering/development-workflow](../08-engineering/development-workflow.md) |
 | Test pyramid | flowchart | [engineering/testing-strategy](../08-engineering/testing-strategy.md) |
-| Deployment topology | *to add* | [operations/infrastructure](../09-operations/infrastructure.md) |
+| Deployment topology | graph | [operations/infrastructure](../09-operations/infrastructure.md) |

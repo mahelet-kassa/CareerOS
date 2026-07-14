@@ -50,22 +50,61 @@ erDiagram
 
 ## Planned tables (target model)
 
-As modules land ([backend](../02-backend/overview.md)), the model grows roughly:
+A **single RDS PostgreSQL** instance owns all domain data, with pgvector for
+embeddings. As modules land ([backend](../02-backend/overview.md)), the model
+grows toward:
 
 ```mermaid
 erDiagram
     users ||--o{ profiles : has
-    profiles ||--o{ profile_embeddings : "chunked & embedded"
-    users ||--o{ jobs : saves
+    profiles ||--o{ experiences : contains
+    profiles ||--o{ education : contains
+    profiles ||--o{ skills : contains
+    profiles ||--o{ evidence_items : "source-attributed facts"
+    users ||--o{ job_postings : captures
     users ||--o{ applications : tracks
-    jobs ||--o| applications : "for"
+    job_postings ||--o| applications : "for"
+    applications ||--o{ application_events : "append-only history"
+    applications ||--o{ documents : "generated, versioned"
+    profiles ||--o{ match_analyses : "vs postings (cached)"
+    job_postings ||--o{ match_analyses : "vs profile (cached)"
 
     users { UUID id PK }
-    profiles { UUID id PK  UUID user_id FK }
-    profile_embeddings { UUID id PK  UUID profile_id FK  vector embedding }
-    jobs { UUID id PK  UUID user_id FK }
-    applications { UUID id PK  UUID user_id FK  UUID job_id FK  TEXT status }
+    profiles { UUID id PK  UUID user_id FK  int version }
+    experiences { UUID id PK  UUID profile_id FK }
+    education { UUID id PK  UUID profile_id FK }
+    skills { UUID id PK  UUID profile_id FK }
+    evidence_items { UUID id PK  UUID profile_id FK  TEXT source }
+    job_postings { UUID id PK  UUID user_id FK  JSONB extracted }
+    applications { UUID id PK  UUID user_id FK  UUID posting_id FK  TEXT status }
+    application_events { UUID id PK  UUID application_id FK  TEXT type }
+    documents { UUID id PK  UUID application_id FK  JSONB fact_lineage  int version }
+    match_analyses { UUID id PK  UUID profile_id FK  UUID posting_id FK }
+    embeddings { UUID id PK  TEXT entity_type  UUID entity_id  vector embedding  TEXT model }
 ```
+
+### Table roles
+
+| Table | Role |
+|---|---|
+| `users` | Account (implemented, V1). |
+| `profiles` | Master profile; versioned (feeds match cache keys). |
+| `experiences` / `education` / `skills` | Structured profile detail. |
+| `evidence_items` | **Source-attributed facts** (from resume/GitHub) — the anchor for evidence-constrained generation. |
+| `job_postings` | Raw text + AI-extracted requirements (JSONB). |
+| `applications` | Pipeline state per applied posting. |
+| `application_events` | **Append-only** outcome history (feeds insights). |
+| `documents` | Generated resumes/cover letters, **versioned, with fact-lineage** (JSONB). |
+| `match_analyses` | Cached per `(profile_version, posting_hash)`. |
+| `embeddings` | `entity_type`, `entity_id`, `vector`, **`model` tag** — isolated for swap/re-embed. |
+
+### Schema conventions (from the architecture doc)
+
+- **JSONB** for AI-extracted payloads (schema evolves fast); **typed columns** for
+  anything queried or joined.
+- **Append-only events** for anything analytics will ever touch.
+- **Soft deletes** except the GDPR hard-delete path.
+- **Model-tag** on embeddings enables re-embedding migrations without a redesign.
 
 > This is the **planned** direction, not yet migrated. Each table arrives via its
 > own Flyway migration and this page is updated in the same PR.
