@@ -1,0 +1,97 @@
+site_name: CareerOS Engineering Docs
+site_description: Living technical knowledge base for CareerOS.
+docs_dir: docs
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.instant
+    - navigation.tracking
+    - content.code.copy
+    - toc.follow
+    - search.suggest
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - tables
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+plugins:
+  - search
+
+nav:
+  - Home: README.md
+  - Conventions: CONVENTIONS.md
+  - 00 · Product:
+      - Vision: 00-product/vision.md
+      - Personas & JTBD: 00-product/personas-and-jobs.md
+      - Requirements: 00-product/requirements.md
+      - User Stories: 00-product/user-stories.md
+      - MVP Scope: 00-product/mvp-scope.md
+      - Roadmap: 00-product/roadmap.md
+  - 01 · Architecture:
+      - Overview: 01-architecture/overview.md
+      - Principles & Constraints: 01-architecture/principles-and-constraints.md
+      - Tech Stack: 01-architecture/tech-stack.md
+      - System Design: 01-architecture/system-design.md
+      - Security: 01-architecture/security.md
+      - Observability: 01-architecture/observability.md
+  - 02 · Backend:
+      - Overview: 02-backend/overview.md
+      - Module Boundaries: 02-backend/module-boundaries.md
+      - Coding Standards: 02-backend/coding-standards.md
+      - Error Handling: 02-backend/error-handling.md
+  - 03 · Frontend:
+      - Overview: 03-frontend/overview.md
+      - Component Architecture: 03-frontend/component-architecture.md
+      - State & Data Fetching: 03-frontend/state-and-data-fetching.md
+      - Design System: 03-frontend/design-system.md
+  - 04 · AI:
+      - Overview: 04-ai/overview.md
+      - RAG Pipeline: 04-ai/rag-pipeline.md
+      - Prompts & Evals: 04-ai/prompts-and-evals.md
+      - Model Strategy: 04-ai/model-strategy.md
+  - 05 · Data:
+      - Schema & ERD: 05-data/schema.md
+      - Migrations: 05-data/migrations.md
+      - Data Lifecycle & PII: 05-data/data-lifecycle.md
+  - 06 · API:
+      - Overview: 06-api/overview.md
+      - OpenAPI Contract: 06-api/openapi.md
+  - 07 · Decisions:
+      - ADR Index: 07-decisions/README.md
+      - ADR-001 Monolith + AI service: adr/001-monolith-plus-ai-service.md
+  - 08 · Engineering:
+      - Development Workflow: 08-engineering/development-workflow.md
+      - Testing Strategy: 08-engineering/testing-strategy.md
+      - Implementation Progress: 08-engineering/implementation-progress.md
+      - Deployment: 08-engineering/deployment.md
+  - 09 · Operations:
+      - Runbook: 09-operations/runbook.md
+      - Infrastructure: 09-operations/infrastructure.md
+  - Diagrams: diagrams/README.md

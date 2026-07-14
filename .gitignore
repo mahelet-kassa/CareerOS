@@ -1,0 +1,21 @@
+# Java / Gradle
+apps/core-api/build/
+apps/core-api/.gradle/
+*.class
+
+# Node / Next.js
+node_modules/
+apps/web/.next/
+apps/web/out/
+apps/web/next-env.d.ts
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
