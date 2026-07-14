@@ -8,7 +8,7 @@ owner: Mahelet
 # Diagrams
 
 Diagrams are **code**, not binary images (see
-[conventions](../CONVENTIONS.md#6-diagrams-as-code-mermaid--c4)).
+[conventions](../CONVENTIONS.md#6-diagrams-as-code-mermaid-c4)).
 
 - **Default:** inline [Mermaid](https://mermaid.js.org) in the page where the
   diagram is discussed (renders on GitHub and in the MkDocs site).

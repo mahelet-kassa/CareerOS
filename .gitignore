@@ -19,3 +19,6 @@ apps/web/next-env.d.ts
 .vscode/
 *.iml
 .DS_Store
+
+# MkDocs build output
+site/
