@@ -11,6 +11,13 @@ spring:
     open-in-view: false
   flyway:
     enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # JWKS is resolved lazily on the first bearer-token request, so the app
+          # boots fine before a real OIDC provider (Cognito/Auth0) is configured.
+          issuer-uri: ${OIDC_ISSUER_URI:https://oidc-not-configured.invalid}
 
 management:
   endpoints:

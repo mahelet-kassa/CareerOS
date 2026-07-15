@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { SidebarNav } from "@/components/layout/sidebar-nav";
+import { UserMenu } from "@/components/layout/user-menu";
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   return (
@@ -15,6 +16,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         <SidebarNav />
       </aside>
       <div className="flex min-w-0 flex-1 flex-col">
+        <header className="flex h-14 items-center justify-end border-b px-6">
+          <UserMenu />
+        </header>
         <main className="mx-auto w-full max-w-5xl flex-1 space-y-6 p-6 md:p-8">
           {children}
         </main>

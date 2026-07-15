@@ -20,6 +20,7 @@ and dependency matter more than dates. Mirror completed work in
 - [x] CI (build + test + lint) on every PR
 - [x] Testcontainers integration test against real pgvector
 - [ ] Managed auth (Cognito/Auth0 OIDC) + Spring resource server ([ADR-002](../adr/002-managed-auth.md))
+      — code wired both sides; remaining: create the provider tenant + env vars
 
 ## Milestone 1 — Master profile
 

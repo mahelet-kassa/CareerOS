@@ -18,6 +18,38 @@ entry.
 
 ---
 
+## 2026-07-15 · Auth wiring — OIDC resource server + Auth.js code flow
+
+**Shipped**
+- `core-api` is now a stateless OAuth2 **resource server** (ADR-002):
+  `spring-boot-starter-oauth2-resource-server` added, `SecurityConfig` validates
+  bearer JWTs via JWKS discovered from `OIDC_ISSUER_URI`. Health stays public;
+  everything else still denied by default.
+- `web` runs the OIDC **authorization-code flow** via Auth.js v5: generic OIDC
+  provider from env vars (works with Cognito or Auth0 unchanged), JWT sessions
+  in httpOnly cookies, access token exposed server-side for core-api calls.
+- Middleware guards all `(app)` routes → redirects to `/login` with a
+  `callbackUrl`. Login page + `UserMenu` (sign in/out) in the app shell.
+- `.env.example` documents required auth env vars.
+
+**Why these choices**
+- *Provider-agnostic issuer discovery* so the Cognito-vs-Auth0 call (ADR-002
+  leaves both open) is a config change, not a code change.
+- *Guard passes through while unconfigured* so the shell stays browsable in
+  local dev before a tenant exists — safe because core-api denies all data
+  requests regardless.
+
+**Learnings / notes**
+- Auth.js needs `AUTH_SECRET` at runtime; an insecure fallback keeps dev/CI
+  builds green and MUST be overridden in production (flagged in `.env.example`).
+
+**Next**
+- Create the provider tenant (Cognito user pool or Auth0 app) with Google +
+  GitHub connections, set env vars, verify the full round trip end-to-end.
+- Then Milestone 1: the `profile` module.
+
+---
+
 ## 2026-07-15 · Frontend foundation — component architecture + app shell
 
 **Shipped**
