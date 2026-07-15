@@ -18,6 +18,42 @@ entry.
 
 ---
 
+## 2026-07-15 · Frontend foundation — component architecture + app shell
+
+**Shipped**
+- [Component architecture](../03-frontend/component-architecture.md) promoted
+  from stub to current: route map for the MVP journey, feature-based folder
+  structure, component inventory (server/client split), loading/error/empty
+  conventions, accessibility baseline.
+- Tailwind CSS v4 + shadcn/ui installed in `web` (button, card, badge, skeleton,
+  separator primitives; neutral theme with light/dark tokens).
+- App Router restructured into route groups: `(marketing)` landing page and
+  `(app)` authenticated shell with sidebar navigation.
+- Placeholder pages for all six MVP surfaces (dashboard, profile, jobs,
+  applications, insights, settings), each with `PageHeader` + `EmptyState`
+  pointing at the user story it will serve.
+- Docs site deployed to GitHub Pages: <https://mahelet-kassa.github.io/CareerOS/>.
+
+**Why these choices**
+- *Feature-based folders with routes-stay-thin* so domain code is testable and
+  routes are just composition — the structure scales without churn.
+- *No global store* reaffirmed; TanStack Query + URL state until a concrete need
+  (candidate: tailoring draft state, Milestone 4).
+- *Empty states name their user story* so the skeleton doubles as a map of what
+  to build next.
+
+**Learnings / notes**
+- Evaluated pivoting to Vite + Supabase + Vercel (external planning prompt);
+  decided to keep Next.js + Spring Boot + AWS — Milestone 0 is already shipped
+  and the ADR trail is the portfolio's differentiator. Adopted the prompt's
+  step-by-step method instead.
+
+**Next**
+- Managed auth (ADR-002) to close out Milestone 0, then the `profile` module
+  (Milestone 1) with resume upload behind the `(app)` shell.
+
+---
+
 ## 2026-07-14 · Milestone 0 — Foundation
 
 **Shipped**

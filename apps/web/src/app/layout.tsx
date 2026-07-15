@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import "@/styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "CareerOS",
+  title: {
+    default: "CareerOS",
+    template: "%s · CareerOS",
+  },
   description: "Your AI job-search copilot",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body style={{ fontFamily: "system-ui, sans-serif", margin: 0 }}>
-        {children}
-      </body>
+      <body className="min-h-screen font-sans antialiased">{children}</body>
     </html>
   );
 }

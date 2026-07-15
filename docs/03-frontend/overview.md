@@ -50,10 +50,15 @@ deliberate placeholder. See [API overview](../06-api/overview.md).
   (NFR-P3).
 - Details: [state-and-data-fetching](state-and-data-fetching.md).
 
+## Target structure
+
+The route map, feature-based folder structure, and component inventory are
+defined in [Component architecture](component-architecture.md). Routes stay thin;
+domain code lives in `features/`; shadcn/ui primitives in `components/ui`.
+
 ## To document as UI is built
 
-- [Component architecture](component-architecture.md)
-- [Design system](design-system.md)
+- [Design system](design-system.md) — tokens and theming as real views land.
 - Auth handling on the client (token storage, protected routes).
 
 ## Related
