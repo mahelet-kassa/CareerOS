@@ -1,5 +1,7 @@
 site_name: CareerOS Engineering Docs
 site_description: Living technical knowledge base for CareerOS.
+site_url: https://mahelet-kassa.github.io/CareerOS/
+repo_url: https://github.com/mahelet-kassa/CareerOS
 docs_dir: docs
 
 theme:
