@@ -17,14 +17,10 @@ jobs:
         with:
           distribution: temurin
           java-version: "21"
-      # Pin Gradle: no wrapper is committed yet, and the runner's preinstalled
-      # Gradle (9.x) is incompatible with the Spring Boot 3.3.x plugin.
       - uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: "8.10"
       # Testcontainers uses the runner's Docker daemon for the pgvector container
       - name: Build and test
-        run: gradle build
+        run: ./gradlew build --no-daemon
 
   web:
     runs-on: ubuntu-latest
