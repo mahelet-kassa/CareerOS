@@ -1,6 +1,6 @@
-# ADR 002: Managed auth (Cognito/Auth0) + Spring resource server, not custom auth
+# ADR 002: Managed auth (Auth0) + Spring resource server, not custom auth
 
-Date: 2026-07-14 · Status: Accepted
+Date: 2026-07-14 · Status: Accepted · Amended: 2026-07-15 (provider fixed to Auth0)
 
 ## Context
 
@@ -12,9 +12,16 @@ reimplementing refresh-token rotation and JWKS handling.
 
 ## Decision
 
-- **Buy, don't build.** Use a managed OIDC provider — **Amazon Cognito** (or
-  Auth0 if its DX cost outweighs the savings) — for email/password, Google, and
-  GitHub.
+- **Buy, don't build.** Use a managed OIDC provider for email/password, Google,
+  and GitHub sign-in.
+- **Provider: Auth0** (amended 2026-07-15). Deciding factor: Cognito has no
+  native GitHub federation — GitHub is OAuth2-only (no `id_token`), so Cognito
+  would need a self-hosted OIDC shim, which is exactly the kind of auth
+  infrastructure this ADR exists to avoid. Auth0 supports GitHub natively.
+- **GitHub sign-in ≠ GitHub evidence import.** Sign-in requests minimal scopes.
+  The profile module (Milestone 1) implements a separate app-level "Connect
+  GitHub" OAuth grant with `repo`-read scopes and its own stored token, because
+  IdP-brokered tokens are not suitable for long-lived data-import access.
 - **Web** runs the OIDC authorization-code flow (Auth.js). Tokens are stored in
   **httpOnly, secure cookies**, never `localStorage`.
 - **`core-api`** is a stateless **OAuth2 resource server** validating JWTs via
@@ -27,8 +34,8 @@ reimplementing refresh-token rotation and JWKS handling.
 - (+) Auth-critical primitives (rotation, MFA, social login) are maintained by a
   specialist, reducing existential risk.
 - (+) Frees the one engineer to spend effort on the differentiating AI pipeline.
-- (−) Cognito's developer experience is famously rough; Auth0 costs more. Accepted
-  because custom auth is the wrong risk here.
+- (−) Auth0 adds a vendor and a bill that grows with MAUs (free tier covers MVP
+  scale). Accepted because custom auth is the wrong risk here.
 - Revisit triggers: provider cost becomes material at scale, or a hard product
   requirement the provider cannot meet.
 

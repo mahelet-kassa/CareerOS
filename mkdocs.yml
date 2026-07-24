@@ -91,9 +91,10 @@ nav:
   - 07 · Decisions:
       - ADR Index: 07-decisions/README.md
       - ADR-001 Monolith + AI service: adr/001-monolith-plus-ai-service.md
-      - ADR-002 Managed auth: adr/002-managed-auth.md
+      - ADR-002 Managed auth (Auth0): adr/002-managed-auth.md
       - ADR-003 Evidence-constrained generation: adr/003-evidence-constrained-generation.md
   - 08 · Engineering:
+      - Project Changelog: 08-engineering/changelog.md
       - Development Workflow: 08-engineering/development-workflow.md
       - Testing Strategy: 08-engineering/testing-strategy.md
       - Implementation Progress: 08-engineering/implementation-progress.md

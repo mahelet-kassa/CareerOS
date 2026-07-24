@@ -18,6 +18,36 @@ entry.
 
 ---
 
+## 2026-07-24 · Local full stack + Gradle wrapper + stakeholder changelog
+
+**Shipped**
+- Gradle wrapper (`gradlew` / 8.10) committed under `apps/core-api`; CI now runs
+  `./gradlew build` instead of a pinned system Gradle.
+- Docker Compose publishes Postgres on host **5433** (container still 5432) to
+  avoid collisions with a pre-existing Windows Postgres on 5432.
+- [ADR-002](../adr/002-managed-auth.md) amended: provider fixed to **Auth0**
+  (native GitHub IdP; Cognito would have needed a custom OIDC shim).
+- New stakeholder [Project Changelog](changelog.md); conventions require a
+  changelog + journal entry on every meaningful change.
+
+**Why these choices**
+- *Wrapper in-repo* removes "which Gradle?" drift between laptops and CI.
+- *5433 mapping* keeps CareerOS portable without forcing developers to uninstall
+  unrelated local databases.
+- *Separate changelog vs journal* so outside stakeholders get plain-language
+  updates without drowning in engineering detail.
+
+**Learnings / notes**
+- On this machine Oracle TNSLSNR owns port 8080 — run `core-api` with
+  `SERVER_PORT=8081` and point `apps/web/.env.local` `API_BASE_URL` at it
+  (local-only; not committed).
+
+**Next**
+- Auth0 tenant + env vars; verify login round trip.
+- Milestone 1: profile module.
+
+---
+
 ## 2026-07-15 · Auth wiring — OIDC resource server + Auth.js code flow
 
 **Shipped**

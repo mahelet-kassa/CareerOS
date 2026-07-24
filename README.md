@@ -16,21 +16,27 @@ Full project documentation — vision, requirements, architecture, data, API, AI
 and engineering process — lives in [`docs/`](docs/README.md). It's authored as
 docs-as-code (Markdown + Mermaid) and published with MkDocs Material (`mkdocs.yml`).
 
+**Stakeholder updates:** every meaningful change is recorded in
+[`docs/08-engineering/changelog.md`](docs/08-engineering/changelog.md)
+(also on the docs site). Use that page when briefing outside partners.
+
 ## Local development
 
 Prereqs: Java 21, Node 22+, Docker.
 
 ```bash
-# 1. Database (Postgres 16 + pgvector)
+# 1. Database (Postgres 16 + pgvector) — host port 5433
 docker compose up -d
 
-# 2. API — first time only: generate the Gradle wrapper
+# 2. API — first time only: wrapper is already committed
 cd apps/core-api
-gradle wrapper --gradle-version 8.10   # requires a local Gradle once; wrapper is committed after
-./gradlew bootRun                       # http://localhost:8080/actuator/health
+# If something else owns 8080 on your machine (e.g. Oracle TNS), use 8081:
+#   SERVER_PORT=8081 DATABASE_URL=jdbc:postgresql://localhost:5433/careeros ./gradlew bootRun
+./gradlew bootRun                       # http://localhost:8080/actuator/health (or :8081)
 
 # 3. Web
 cd apps/web
+cp .env.example .env.local              # set API_BASE_URL if API is not on :8080
 npm install
 npm run dev                             # http://localhost:3000
 ```

@@ -31,7 +31,7 @@ code it describes, and published as a browsable site.
 | [05 · Data](05-data/schema.md) | Database schema, ERD, migrations, data lifecycle |
 | [06 · API](06-api/overview.md) | REST conventions, versioning, the generated OpenAPI contract |
 | [07 · Decisions](07-decisions/README.md) | Architecture Decision Records (ADRs) |
-| [08 · Engineering](08-engineering/development-workflow.md) | Workflow, testing strategy, build journal, deployment |
+| [08 · Engineering](08-engineering/changelog.md) | **Changelog** (stakeholders), workflow, testing, build journal, deployment |
 | [09 · Operations](09-operations/runbook.md) | Runbook, infrastructure topology |
 
 ## How this documentation is organized

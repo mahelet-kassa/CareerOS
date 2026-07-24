@@ -74,5 +74,11 @@ them, you don't rewrite them.
 - **Per PR:** touch affected docs.
 - **Per milestone:** review pages in the touched sections, bump `last-reviewed`
   or mark `stale`.
-- **Build journal:** append to
-  [Implementation Progress](08-engineering/implementation-progress.md) as work lands.
+- **Every meaningful change ships with two doc updates in the same commit/PR:**
+  1. **[Project Changelog](08-engineering/changelog.md)** — stakeholder-facing
+     (what / why / status / next). Use this when briefing partners, managers, or
+     interviewers who should not need to read code.
+  2. **[Implementation Progress](08-engineering/implementation-progress.md)** —
+     engineering journal (trade-offs, learnings, technical next steps).
+- Skip the changelog only for pure chore commits with no product or process
+  impact (typos, formatting). When in doubt, add an entry.
